@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разобраться в ИИ — курс для тех, кто совсем не разбирается</title>
+<meta name="description" content="Искусственный интеллект простыми словами: без кода, формул и хайпа. Короткие уроки и практика в обычных чат-ботах.">
+<meta name="theme-color" content="#0E1111" id="theme-color">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" id="favicon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Превью ссылки в мессенджерах и соцсетях. Абсолютные адреса — под публикацию на GitHub Pages (публичный репозиторий t-ai-site, scripts/publish-site.sh) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Разобраться в ИИ">
+<meta property="og:title" content="Как работает ИИ — без кода, формул и хайпа">
+<meta property="og:description" content="Курс для тех, кто совсем не разбирается: короткие уроки и практика в обычных чат-ботах.">
+<meta property="og:url" content="https://muraik-win.github.io/t-ai-site/">
+<meta property="og:image" content="https://muraik-win.github.io/t-ai-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Разобраться в ИИ: как работает ИИ — без кода, формул и хайпа">
+<meta name="twitter:card" content="summary_large_image">
+<script>
+  // Применяем сохранённую тему до отрисовки, чтобы не было мигания
+  try {
+    var saved = localStorage.getItem('theme');
+    if (['light', 'paper', 'night'].indexOf(saved) !== -1) document.documentElement.dataset.theme = saved;
+  } catch (e) {}
+  // Масштаб для больших экранов: содержимое (~1210px) занимает около 90% ширины окна.
+  // Ограничиваем и по высоте, чтобы на очень широких, но низких мониторах первый экран не раздувался.
+  (function () {
+    var root = document.documentElement, pending = false;
+    function fit() {
+      pending = false;
+      var z = Math.min(innerWidth / 1340, innerHeight / 680);
+      root.style.setProperty('--zoom', z > 1 ? z.toFixed(3) : '1');
+    }
+    fit();
+    addEventListener('resize', function () {
+      if (!pending) { pending = true; requestAnimationFrame(fit); }
+    });
+  })();
+  // Анимации включаем только если пользователь не просил уменьшить движение
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+/* Темы: тёмная по умолчанию, остальные переключаются через data-theme на <html> */
+:root {
+  --accent: #C6F24E;
+  --logo-accent: #C6F24E;
+  --logo-tile: #C6F24E;
+  --logo-fur: #8F9893;
+  --logo-light: #F6F4EF;
+  --logo-dark: #1E2120;
+  --accent-hover: #DCFA8A;
+  --on-accent: #0E1111;
+  --bg: #0E1111;
+  --surface: #141817;
+  --line: #262B29;
+  --text: #E8ECE9;
+  --muted: #A3ACA6;
+  --code: #C9D0CB;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --accent: #357010;
+  --logo-accent: #6CC23A;
+  --logo-tile: #357010;
+  --logo-fur: #A7AFAA;
+  --logo-light: #FFFFFF;
+  --logo-dark: #1E2120;
+  --accent-hover: #285808;
+  --on-accent: #FFFFFF;
+  --bg: #FFFFFF;
+  --surface: #F4F6F4;
+  --line: #E2E6E3;
+  --text: #141816;
+  --muted: #5A625D;
+  --code: #2E3531;
+  color-scheme: light;
+}
+:root[data-theme="paper"] {
+  --accent: #9A3714;
+  --logo-accent: #E07A45;
+  --logo-tile: #9A3714;
+  --logo-fur: #B1A79C;
+  --logo-light: #FFF9EF;
+  --logo-dark: #2B2520;
+  --accent-hover: #82300F;
+  --on-accent: #FFFFFF;
+  --bg: #F6F1E7;
+  --surface: #EFE8DA;
+  --line: #DDD3C1;
+  --text: #2B2520;
+  --muted: #6B6157;
+  --code: #3D352E;
+  color-scheme: light;
+}
+:root[data-theme="night"] {
+  --accent: #8AB4FF;
+  --logo-accent: #8AB4FF;
+  --logo-tile: #8AB4FF;
+  --logo-fur: #7F88A6;
+  --logo-light: #F3F5FC;
+  --logo-dark: #141A2E;
+  --accent-hover: #B0CCFF;
+  --on-accent: #0F1424;
+  --bg: #0F1424;
+  --surface: #161D33;
+  --line: #263052;
+  --text: #E6E9F5;
+  --muted: #A0A8C6;
+  --code: #C8CEE6;
+  color-scheme: dark;
+}
+:root {
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 45%, var(--line));
+  --display: Unbounded, sans-serif;
+  --body: Inter, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius: 16px;
+  --section-gap: clamp(72px, 10vw, 128px);
+}
+
+/* База */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; }
+h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -0.02em; }
+h3 { font-family: var(--body); font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0; text-wrap: pretty; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--on-accent); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+section { padding: var(--section-gap) 0; }
+section + section { border-top: 1px solid var(--line); }
+
+/* Заголовок секции */
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; line-height: 1.4; }
+.eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.section-title { font-size: clamp(28px, 4vw, 44px); margin-bottom: 16px; max-width: 820px; }
+.lead { font-size: clamp(17px, 2vw, 19px); line-height: 1.65; color: var(--muted); max-width: 620px; }
+
+/* Кнопки */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 26px; border: 1px solid transparent; border-radius: 12px; font-family: var(--body); font-size: 16px; font-weight: 600; line-height: 1; text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.btn svg { width: 18px; height: 18px; flex: 0 0 auto; transition: transform 0.2s; }
+.btn:hover svg { transform: translateX(3px); }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); color: var(--on-accent); transform: translateY(-2px); box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 30%, transparent); }
+.btn-secondary { background: var(--surface); border-color: var(--line); color: var(--text); }
+.btn-secondary:hover { border-color: var(--accent-line); color: var(--text); transform: translateY(-2px); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Шапка */
+.site-header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.header { display: flex; gap: 16px; align-items: center; justify-content: space-between; min-height: 72px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--text); text-decoration: none; }
+.logo:hover { color: var(--text); }
+.logo-mark { display: block; width: 40px; height: 40px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--logo-accent) 45%, transparent)); }
+/* При смене темы енот на мгновение подсвечивается ярче */
+@keyframes theme-glow {
+  0%, 100% { filter: drop-shadow(0 0 5px color-mix(in srgb, var(--logo-accent) 45%, transparent)); }
+  35% { filter: drop-shadow(0 0 14px color-mix(in srgb, var(--logo-accent) 90%, transparent)) drop-shadow(0 0 4px var(--logo-accent)); }
+}
+@keyframes theme-glow-hero {
+  0%, 100% { filter: drop-shadow(0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent)) drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)); }
+  35% { filter: drop-shadow(0 0 3px var(--accent)) drop-shadow(0 0 42px color-mix(in srgb, var(--accent) 70%, transparent)); }
+}
+.logo-mark.glow { animation: theme-glow 1.1s ease-out; }
+.hero-mascot.glow { animation: theme-glow-hero 1.1s ease-out; }
+/* Енот рисуется встроенным SVG: цвета берутся из темы */
+/* Источник для иконки вкладки: на странице не показывается */
+.favicon-src { display: none !important; }
+.lg-tile { fill: var(--logo-tile); }
+.lg-halo { fill: var(--logo-accent); stroke: var(--logo-accent); opacity: 0.55; }
+.lg-fur { fill: var(--logo-fur); }
+.lg-light { fill: var(--logo-light); }
+.lg-dark { fill: var(--logo-dark); }
+.lg-dark-line { fill: none; stroke: var(--logo-dark); }
+.lg-circuit { fill: none; stroke: var(--logo-accent); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.lg-eye-white { fill: var(--logo-light); }
+.lg-iris { fill: #7A5230; }
+.lg-pupil { fill: var(--logo-dark); }
+.lg-shine { fill: #FFFFFF; }
+.lg-node-ring { fill: var(--logo-dark); stroke: var(--logo-accent); stroke-width: 6; }
+.header-right { display: flex; gap: 8px 24px; align-items: center; }
+.nav { display: flex; gap: 4px; }
+.nav a { padding: 8px 14px; border-radius: 999px; color: var(--muted); font-size: 15px; font-weight: 500; text-decoration: none; transition: background-color 0.15s, color 0.15s; }
+.nav a:hover { background: var(--surface); color: var(--text); }
+@media (max-width: 820px) { .nav { display: none; } }
+
+/* Выбор темы: кнопка + выпадающее меню */
+.theme-picker { position: relative; }
+.theme-toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px 0 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-family: var(--body); font-size: 14px; font-weight: 500; cursor: pointer; transition: border-color 0.15s; }
+.theme-toggle:hover { border-color: var(--accent-line); }
+.theme-toggle .chevron { width: 14px; height: 14px; color: var(--muted); transition: transform 0.2s; }
+.theme-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+/* Иконка темы: круг цвета фона с точкой цвета акцента; обводка через inset-тень, чтобы не было квадратных краёв */
+.swatch { position: relative; display: block; flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.45); }
+.swatch::after { content: ""; position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--swatch-accent); }
+.swatch-dark  { background: #0E1111; --swatch-accent: #C6F24E; }
+.swatch-light { background: #FFFFFF; --swatch-accent: #357010; }
+.swatch-paper { background: #F6F1E7; --swatch-accent: #9A3714; }
+.swatch-night { background: #0F1424; --swatch-accent: #8AB4FF; }
+
+.theme-menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: 260px; margin: 0; padding: 6px; list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.15s, transform 0.15s, visibility 0.15s; }
+.theme-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
+.theme-option { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px; border: 0; border-radius: 10px; background: transparent; color: var(--text); font-family: var(--body); line-height: 1.4; text-align: left; cursor: pointer; }
+.theme-option:hover { background: var(--line); }
+.theme-option .name { display: block; font-size: 15px; font-weight: 600; }
+.theme-option .hint { display: block; font-size: 13px; color: var(--muted); }
+.theme-option .check { margin-left: auto; width: 16px; height: 16px; color: var(--accent); visibility: hidden; }
+.theme-option[aria-checked="true"] .check { visibility: visible; }
+
+/* Смена темы: круг расходится от кнопки (View Transitions API), иначе — плавная смена цветов */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { z-index: 2; }
+.theme-fade, .theme-fade *, .theme-fade *::before, .theme-fade *::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+/* Первый экран */
+.hero { padding-top: clamp(56px, 9vw, 112px); }
+.hero h1 { max-width: 920px; font-size: clamp(36px, 6.4vw, 72px); line-height: 1.06; letter-spacing: -0.03em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { margin-top: 28px; font-size: clamp(18px, 2.2vw, 21px); }
+.hero .btn-row { margin-top: 40px; }
+.hero-facts { list-style: none; margin: 56px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 28px; }
+.hero-facts li { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
+.hero-facts svg { width: 18px; height: 18px; color: var(--accent); flex: 0 0 auto; }
+
+/* Сравнение правила/примеры */
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; margin-top: 48px; }
+.compare > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(24px, 4vw, 36px); display: flex; flex-direction: column; gap: 14px; transition: border-color 0.2s; }
+.compare > div:hover { border-color: var(--accent-line); }
+.compare h3 { font-family: var(--display); font-weight: 500; font-size: 24px; letter-spacing: -0.01em; }
+.compare .tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--accent); }
+.compare pre { margin: 6px 0 0; padding: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; font-family: var(--mono); font-size: 14px; line-height: 1.75; color: var(--code); white-space: pre-wrap; }
+.note { margin-top: 24px; color: var(--muted); font-size: 16px; }
+
+/* Квиз «Программа или ИИ?» */
+.quiz { list-style: none; padding: 0; margin: 48px 0 0; display: flex; flex-direction: column; gap: 12px; max-width: 860px; counter-reset: q; }
+.quiz-item { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 20px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; counter-increment: q; transition: border-color 0.2s; }
+.quiz-item.answered { border-color: var(--accent-line); }
+.quiz-q { flex: 1 1 320px; font-size: 18px; font-weight: 600; line-height: 1.4; }
+.quiz-q::before { content: counter(q, decimal-leading-zero); margin-right: 14px; font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--accent); }
+.quiz-choices { display: flex; gap: 8px; }
+.quiz-btn { min-height: 44px; min-width: 116px; padding: 0 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 15px; font-weight: 600; cursor: pointer; transition: border-color 0.15s, background-color 0.15s, color 0.15s, opacity 0.15s; }
+.quiz-btn:hover:not(:disabled) { border-color: var(--accent-line); }
+.quiz-btn:disabled { cursor: default; }
+.quiz-btn.correct { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.quiz-btn.wrong { border-color: var(--muted); color: var(--muted); text-decoration: line-through; }
+.quiz-btn.dim { opacity: 0.45; }
+.quiz-feedback { flex: 1 1 100%; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 16px; line-height: 1.6; }
+.quiz-feedback .verdict { font-weight: 600; color: var(--text); }
+.quiz-feedback:focus { outline: none; }
+.quiz-result { margin-top: 24px; max-width: 860px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--accent-line); border-radius: 16px; background: var(--accent-soft); }
+.quiz-result[hidden], .quiz-feedback[hidden] { display: none; }
+.quiz-score { font-family: var(--display); font-size: 24px; font-weight: 600; }
+.quiz-msg { margin-top: 6px; color: var(--muted); }
+@media (max-width: 560px) {
+  .quiz-choices { flex: 1 1 100%; }
+  .quiz-btn { flex: 1 1 0; }
+}
+
+/* Карточки «для кого» */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 16px; margin-top: 48px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; transition: border-color 0.2s, transform 0.2s; }
+.card:hover { border-color: var(--accent-line); transform: translateY(-3px); }
+.card .idx { display: block; margin-bottom: 20px; font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.card h3 { font-size: 19px; line-height: 1.3; margin-bottom: 10px; }
+.card p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+/* Результаты */
+.outcomes { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+.outcomes li { display: flex; align-items: flex-start; gap: 14px; padding: 20px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; font-size: 17px; line-height: 1.5; }
+.outcomes .ico { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; }
+.outcomes .ico svg { width: 16px; height: 16px; }
+
+/* Программа */
+.modules { list-style: none; padding: 0; margin: 48px 0 0; display: flex; flex-direction: column; gap: 8px; }
+.modules li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; transition: background-color 0.2s, border-color 0.2s; }
+.modules li:hover { background: var(--surface); border-color: var(--accent-line); }
+.modules .num { flex: 0 0 auto; min-width: 44px; padding: 4px 0; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-size: 14px; font-weight: 500; text-align: center; }
+.modules .name { flex: 0 1 320px; font-size: 18px; font-weight: 600; line-height: 1.35; }
+.modules .desc { flex: 1 1 340px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+
+/* Шаги урока */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 16px; margin-top: 48px; }
+.step { padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
+.step .n { display: block; font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1; color: var(--accent); margin-bottom: 24px; }
+.step h3 { font-size: 19px; margin-bottom: 8px; }
+.step p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+/* Об авторе */
+.author { display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; padding: clamp(28px, 5vw, 48px); background: var(--surface); border: 1px solid var(--line); border-radius: 24px; }
+.author-text { flex: 1 1 420px; max-width: 760px; }
+.author-text .section-title { font-size: clamp(26px, 3.4vw, 36px); }
+.author-text .lead + .lead { margin-top: 12px; }
+
+/* Вопросы */
+.faq { margin-top: 48px; display: flex; flex-direction: column; gap: 8px; max-width: 860px; }
+.faq details { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); transition: border-color 0.2s; }
+.faq details[open] { border-color: var(--accent-line); }
+.faq summary { cursor: pointer; padding: 20px 22px; font-size: 17px; font-weight: 600; line-height: 1.4; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; border-radius: 14px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft) no-repeat center / 12px 12px; background-image: linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)); background-size: 12px 2px, 2px 12px; transition: transform 0.25s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding: 0 22px 22px; color: var(--muted); line-height: 1.65; max-width: 720px; }
+
+/* Финальный призыв */
+.cta { border: 1px solid var(--accent-line); border-radius: 24px; background: var(--surface); padding: clamp(32px, 6vw, 64px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between; }
+.cta h2 { font-size: clamp(26px, 3.6vw, 40px); margin-bottom: 14px; }
+.cta p { color: var(--muted); max-width: 560px; font-size: 18px; line-height: 1.6; }
+
+/* Подвал */
+.footer { border-top: 1px solid var(--line); }
+.footer .wrap { padding-top: 32px; padding-bottom: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 15px; color: var(--muted); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.footer a { color: var(--muted); }
+.footer a:hover { color: var(--text); }
+
+@media (max-width: 560px) {
+  .theme-toggle .label-text { display: none; }
+  .btn-row .btn { flex: 1 1 100%; }
+}
+
+/* ---------- Фон: точечная сетка, лёгкое зерно и мягкое свечение у первого экрана ---------- */
+:root { --grid-dot: color-mix(in srgb, var(--text) 13%, transparent); --grain-opacity: 0.05; }
+:root[data-theme="light"], :root[data-theme="paper"] { --grid-dot: color-mix(in srgb, var(--text) 16%, transparent); --grain-opacity: 0.06; }
+body::before, body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+/* Сетка из точек, плавно исчезающая к краям экрана */
+body::before {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 20%, transparent 80%);
+}
+/* Зерно, чтобы однотонный фон не выглядел «пластиковым» */
+body::after {
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* Два мягких пятна цвета темы за первым экраном */
+.hero { position: relative; isolation: isolate; overflow: hidden; }
+.hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; filter: blur(80px); }
+.hero::before { width: 620px; height: 620px; top: -220px; right: -160px; background: color-mix(in srgb, var(--accent) 11%, transparent); }
+.hero::after { width: 520px; height: 420px; bottom: -260px; left: -200px; background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+/* Первый экран: енот справа */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 48px; }
+.hero-art { display: none; }
+.hero-art { position: relative; }
+/* Мягкое свечение цвета темы за головой */
+.hero-art::before { content: ""; position: absolute; inset: 8% 4% 4%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 38%, transparent), transparent); filter: blur(28px); }
+.hero-mascot { position: relative; display: block; width: 100%; height: auto; filter: drop-shadow(0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent)) drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)); }
+/* На первом экране енот без плитки — только голова */
+.hero-mascot .lg-tile { display: none; }
+@media (min-width: 980px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) 300px; }
+  .hero-art { display: block; }
+}
+
+.compare .bad { color: var(--muted); }
+.compare .ok { color: var(--accent); font-weight: 500; }
+
+/* ---------- Анимации (только при классе .motion) ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes mascot-in { from { opacity: 0; transform: translateY(24px) rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(6deg); } }
+@keyframes float { 0%, 100% { transform: rotate(6deg) translateY(0); } 50% { transform: rotate(4deg) translateY(-10px); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes node-in { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+/* Первый экран появляется по очереди */
+.motion .hero-text > * { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.motion .hero-text > :nth-child(2) { animation-delay: 0.08s; }
+.motion .hero-text > :nth-child(3) { animation-delay: 0.16s; }
+.motion .hero-text > :nth-child(4) { animation-delay: 0.24s; }
+.motion .hero-text > :nth-child(5) { animation-delay: 0.32s; }
+.motion .hero-mascot { animation: mascot-in 0.9s 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2) both, float 6s 1.2s ease-in-out infinite; }
+.hero-mascot { transform: rotate(6deg); }
+
+/* Енот моргает, «микросхемы» прорисовываются при загрузке; логотип наклоняется при наведении */
+.lg-eyes, .lg-node-ring { transform-box: fill-box; transform-origin: center; }
+.lg-pupils { transition: transform 0.15s ease-out; }
+.motion .lg-eyes { animation: blink 5s infinite; }
+.motion .logo-mark .lg-eyes { animation-delay: 2.5s; }
+.motion .hero-mascot .lg-circuit { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.1s 0.9s cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+.motion .hero-mascot .lg-node-ring { animation: node-in 0.4s 1.7s both; }
+.logo-mark { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.4); }
+.motion .logo:hover .logo-mark { transform: rotate(-10deg) scale(1.06); }
+
+/* Блоки плавно появляются при прокрутке */
+.motion .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: var(--d, 0s); }
+.motion .reveal.in { opacity: 1; transform: none; }
+
+/* Строки «кода» в сравнении печатаются по одной */
+.motion .compare .ln { display: inline-block; opacity: 0; transform: translateX(-6px); transition: opacity 0.35s, transform 0.35s; }
+.motion .compare pre.typed .ln { opacity: 1; transform: none; }
+.motion .compare pre.typed .ln:nth-child(2) { transition-delay: 0.25s; }
+.motion .compare pre.typed .ln:nth-child(3) { transition-delay: 0.5s; }
+.motion .compare pre.typed .ln:nth-child(4) { transition-delay: 0.75s; }
+
+/* Правильный ответ в квизе «подпрыгивает» */
+.motion .quiz-btn.correct { animation: pop 0.35s ease-out; }
+
+/* ---------- Большие экраны ----------
+   Масштаб --zoom считает скрипт в <head> по размеру окна: на широких мониторах вся вёрстка
+   плавно увеличивается и занимает ~90% ширины, а не висит маленьким окошком посередине. */
+body { zoom: var(--zoom, 1); }
+html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- Упрощённый енот для иконки вкладки: в 16 px мелкие детали полного логотипа сливаются -->
+<svg viewBox="196 112 632 632" class="favicon-src" aria-hidden="true"><polygon class="lg-halo" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266" stroke-width="44" stroke-linejoin="round"/><polygon class="lg-dark" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266"/><polygon class="lg-dark-line" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266" stroke-width="18" stroke-linejoin="round"/><polygon class="lg-fur" points="512,282 445,290 308,224 304,254 320,352 262,490 302,506 284,522 404,602 512,642 620,602 740,522 722,506 762,490 704,352 720,254 716,224 579,290"/><polygon class="lg-dark" points="312,236 400,286 334,318"/><polygon class="lg-dark" points="712,236 624,286 690,318"/><polygon class="lg-dark" points="512,430 470,404 330,404 270,446 296,488 360,526 452,540 512,500 572,540 664,526 728,488 754,446 694,404 554,404"/><polygon class="lg-light" points="512,520 452,548 330,520 300,512 400,598 512,638 624,598 724,512 694,520 572,548"/><polygon class="lg-dark" points="476,528 548,528 536,568 512,582 488,568"/><g><circle class="lg-eye-white" cx="418" cy="462" r="50"/><circle class="lg-iris" cx="418" cy="460" r="38"/><circle class="lg-pupil" cx="418" cy="460" r="21"/><circle class="lg-shine" cx="406" cy="446" r="11"/><circle class="lg-eye-white" cx="606" cy="462" r="50"/><circle class="lg-iris" cx="606" cy="460" r="38"/><circle class="lg-pupil" cx="606" cy="460" r="21"/><circle class="lg-shine" cx="594" cy="446" r="11"/></g></svg>
+
+<div class="site-header">
+  <header class="wrap header">
+    <a class="logo" href="#top"><svg viewBox="196 112 632 632" class="logo-mark" aria-hidden="true"><polygon class="lg-dark" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266"/><polygon class="lg-dark-line" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266" stroke-width="18" stroke-linejoin="round"/><polygon class="lg-fur" points="512,282 445,290 308,224 304,254 320,352 262,490 302,506 284,522 404,602 512,642 620,602 740,522 722,506 762,490 704,352 720,254 716,224 579,290"/><polygon class="lg-light" points="320,240 402,290 352,304 332,276"/><polygon class="lg-light" points="704,240 622,290 672,304 692,276"/><polygon class="lg-dark" points="445,290 512,282 579,290 560,330 534,362 522,470 512,490 502,470 490,362 464,330"/><polygon class="lg-light" points="322,374 440,340 478,396 468,410 396,406 330,392"/><polygon class="lg-light" points="702,374 584,340 546,396 556,410 628,406 694,392"/><polygon class="lg-dark" points="282,442 330,420 400,412 470,418 500,462 490,500 452,546 380,526 320,502 290,472"/><polygon class="lg-dark" points="742,442 694,420 624,412 554,418 524,462 534,500 572,546 644,526 704,502 734,472"/><polygon class="lg-light" points="306,508 380,530 452,550 474,602 418,604 334,546"/><polygon class="lg-light" points="718,508 644,530 572,550 550,602 606,604 690,546"/><polygon class="lg-light" points="478,522 512,502 546,522 560,600 512,634 464,600"/><polygon class="lg-dark" points="482,530 542,530 532,566 512,578 492,566"/><path class="lg-dark-line" d="M512 576V590M512 590Q500 607 484 598M512 590Q524 607 540 598" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><g class="lg-circuits"><path class="lg-circuit" pathLength="1" d="M392 418L374 398L374 370M370 474L336 474L318 492M448 508L458 530"/><path class="lg-circuit" pathLength="1" d="M632 418L650 398L650 370M654 474L688 474L706 492M576 508L566 530"/><circle class="lg-node-ring" cx="374" cy="360" r="9"/><circle class="lg-node-ring" cx="312" cy="498" r="8"/><circle class="lg-node-ring" cx="461" cy="539" r="8"/><circle class="lg-node-ring" cx="650" cy="360" r="9"/><circle class="lg-node-ring" cx="712" cy="498" r="8"/><circle class="lg-node-ring" cx="563" cy="539" r="8"/></g><g class="lg-eyes"><circle class="lg-eye-white" cx="428" cy="460" r="40"/><circle class="lg-eye-white" cx="596" cy="460" r="40"/><g class="lg-pupils"><circle class="lg-iris" cx="428" cy="457" r="32"/><circle class="lg-pupil" cx="428" cy="457" r="18"/><circle class="lg-shine" cx="418" cy="444" r="10"/><circle class="lg-shine" cx="440" cy="470" r="4.5"/><circle class="lg-iris" cx="596" cy="457" r="32"/><circle class="lg-pupil" cx="596" cy="457" r="18"/><circle class="lg-shine" cx="586" cy="444" r="10"/><circle class="lg-shine" cx="608" cy="470" r="4.5"/></g></g></svg>разобраться-в-ии</a>
+    <div class="header-right">
+      <nav class="nav" aria-label="Основное меню">
+        <a href="#for-whom">Для кого</a>
+        <a href="#program">Программа</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <div class="theme-picker">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu">
+          <span class="swatch swatch-dark" id="theme-current-swatch" aria-hidden="true"></span>
+          <span class="label-text"><span class="visually-hidden">Тема: </span><span id="theme-current-name">Тёмная</span></span>
+          <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <ul class="theme-menu" id="theme-menu" role="menu" aria-label="Тема оформления">
+          <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="dark" aria-checked="false"><span class="swatch swatch-dark" aria-hidden="true"></span><span><span class="name">Тёмная</span><span class="hint">Салатовый на чёрном</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+          <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="light" aria-checked="false"><span class="swatch swatch-light" aria-hidden="true"></span><span><span class="name">Светлая</span><span class="hint">Чистый белый</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+          <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="paper" aria-checked="false"><span class="swatch swatch-paper" aria-hidden="true"></span><span><span class="name">Бумага</span><span class="hint">Тёплая, как книга</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+          <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="night" aria-checked="false"><span class="swatch swatch-night" aria-hidden="true"></span><span><span class="name">Ночь</span><span class="hint">Глубокий синий</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+</div>
+
+<main>
+
+<section id="top" class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+    <span class="eyebrow">Курс для тех, кто совсем не разбирается</span>
+    <h1>Как работает ИИ — <em>без кода, формул и&nbsp;хайпа</em></h1>
+    <p class="lead">Короткие уроки о том, что такое нейросети, как пользоваться чат-ботами и где искусственный интеллект может подвести.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="#start">Узнать о старте
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+      <a class="btn btn-secondary" href="#program">Посмотреть программу</a>
+    </div>
+    <ul class="hero-facts">
+      <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>12 модулей</li>
+      <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Уроки по 10–15 минут</li>
+      <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Без программирования</li>
+      <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Практика в чат-ботах</li>
+    </ul>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="212 182 600 500" class="hero-mascot" aria-hidden="true"><rect class="lg-tile" x="132" y="70" width="760" height="760" rx="180"/><polygon class="lg-dark" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266"/><polygon class="lg-dark-line" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266" stroke-width="18" stroke-linejoin="round"/><polygon class="lg-fur" points="512,282 445,290 308,224 304,254 320,352 262,490 302,506 284,522 404,602 512,642 620,602 740,522 722,506 762,490 704,352 720,254 716,224 579,290"/><polygon class="lg-light" points="320,240 402,290 352,304 332,276"/><polygon class="lg-light" points="704,240 622,290 672,304 692,276"/><polygon class="lg-dark" points="445,290 512,282 579,290 560,330 534,362 522,470 512,490 502,470 490,362 464,330"/><polygon class="lg-light" points="322,374 440,340 478,396 468,410 396,406 330,392"/><polygon class="lg-light" points="702,374 584,340 546,396 556,410 628,406 694,392"/><polygon class="lg-dark" points="282,442 330,420 400,412 470,418 500,462 490,500 452,546 380,526 320,502 290,472"/><polygon class="lg-dark" points="742,442 694,420 624,412 554,418 524,462 534,500 572,546 644,526 704,502 734,472"/><polygon class="lg-light" points="306,508 380,530 452,550 474,602 418,604 334,546"/><polygon class="lg-light" points="718,508 644,530 572,550 550,602 606,604 690,546"/><polygon class="lg-light" points="478,522 512,502 546,522 560,600 512,634 464,600"/><polygon class="lg-dark" points="482,530 542,530 532,566 512,578 492,566"/><path class="lg-dark-line" d="M512 576V590M512 590Q500 607 484 598M512 590Q524 607 540 598" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><g class="lg-circuits"><path class="lg-circuit" pathLength="1" d="M392 418L374 398L374 370M370 474L336 474L318 492M448 508L458 530"/><path class="lg-circuit" pathLength="1" d="M632 418L650 398L650 370M654 474L688 474L706 492M576 508L566 530"/><circle class="lg-node-ring" cx="374" cy="360" r="9"/><circle class="lg-node-ring" cx="312" cy="498" r="8"/><circle class="lg-node-ring" cx="461" cy="539" r="8"/><circle class="lg-node-ring" cx="650" cy="360" r="9"/><circle class="lg-node-ring" cx="712" cy="498" r="8"/><circle class="lg-node-ring" cx="563" cy="539" r="8"/></g><g class="lg-eyes"><circle class="lg-eye-white" cx="428" cy="460" r="40"/><circle class="lg-eye-white" cx="596" cy="460" r="40"/><g class="lg-pupils"><circle class="lg-iris" cx="428" cy="457" r="32"/><circle class="lg-pupil" cx="428" cy="457" r="18"/><circle class="lg-shine" cx="418" cy="444" r="10"/><circle class="lg-shine" cx="440" cy="470" r="4.5"/><circle class="lg-iris" cx="596" cy="457" r="32"/><circle class="lg-pupil" cx="596" cy="457" r="18"/><circle class="lg-shine" cx="586" cy="444" r="10"/><circle class="lg-shine" cx="608" cy="470" r="4.5"/></g></g></svg>
+    </div>
+  </div>
+</section>
+
+<section id="idea">
+  <div class="wrap">
+    <span class="eyebrow">Главная мысль первого урока</span>
+    <h2 class="section-title">ИИ — это не магия</h2>
+    <p class="lead">Чтобы понять искусственный интеллект, не нужна математика. Достаточно увидеть одну разницу.</p>
+    <div class="compare">
+      <div>
+        <span class="tag">ОБЫЧНАЯ ПРОГРАММА</span>
+        <h3>Пишут правилами</h3>
+<pre><span class="ln">если нажали «+»:</span>
+<span class="ln">    сложи числа</span>
+<span class="ln">если есть уши и усы:</span>
+<span class="ln">    это кошка?  <span class="bad">← не работает</span></span></pre>
+      </div>
+      <div>
+        <span class="tag">ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ</span>
+        <h3>Учат на примерах</h3>
+<pre><span class="ln">фото_1 → кошка</span>
+<span class="ln">фото_2 → не кошка</span>
+<span class="ln">… миллион примеров …</span>
+<span class="ln">новое фото → кошка  <span class="ok">✓</span></span></pre>
+      </div>
+    </div>
+    <p class="note">Дальше в курсе — как из этой простой идеи получаются чат-боты, генераторы картинок и дипфейки.</p>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="wrap">
+    <span class="eyebrow">Попробуй сам · 30 секунд</span>
+    <h2 class="section-title">Программа или ИИ?</h2>
+    <p class="lead">Для каждой вещи угадай: она работает по правилам, которые написал человек, или её научили на примерах?</p>
+    <ol class="quiz" id="quiz-list">
+      <li class="quiz-item" data-answer="program">
+        <p class="quiz-q">Будильник звонит ровно в 7:00</p>
+        <div class="quiz-choices">
+          <button type="button" class="quiz-btn" data-choice="program">Программа</button>
+          <button type="button" class="quiz-btn" data-choice="ai">ИИ</button>
+        </div>
+        <p class="quiz-feedback" tabindex="-1" hidden><span class="verdict"></span> Это программа: простое правило «в 7:00 включи звук», никакой учёбы.</p>
+      </li>
+      <li class="quiz-item" data-answer="ai">
+        <p class="quiz-q">Телефон разблокируется, когда видит твоё лицо</p>
+        <div class="quiz-choices">
+          <button type="button" class="quiz-btn" data-choice="program">Программа</button>
+          <button type="button" class="quiz-btn" data-choice="ai">ИИ</button>
+        </div>
+        <p class="quiz-feedback" tabindex="-1" hidden><span class="verdict"></span> Это ИИ: лицо каждый раз выглядит чуть иначе — свет, очки, причёска. Правилами такое не описать, поэтому телефон обучили на примерах.</p>
+      </li>
+      <li class="quiz-item" data-answer="ai">
+        <p class="quiz-q">Видеосервис советует ролик «вам может понравиться»</p>
+        <div class="quiz-choices">
+          <button type="button" class="quiz-btn" data-choice="program">Программа</button>
+          <button type="button" class="quiz-btn" data-choice="ai">ИИ</button>
+        </div>
+        <p class="quiz-feedback" tabindex="-1" hidden><span class="verdict"></span> Это ИИ: сервис учится на том, что смотрел ты и миллионы похожих на тебя людей.</p>
+      </li>
+      <li class="quiz-item" data-answer="program">
+        <p class="quiz-q">Банкомат выдаёт ровно ту сумму, которую ты ввёл</p>
+        <div class="quiz-choices">
+          <button type="button" class="quiz-btn" data-choice="program">Программа</button>
+          <button type="button" class="quiz-btn" data-choice="ai">ИИ</button>
+        </div>
+        <p class="quiz-feedback" tabindex="-1" hidden><span class="verdict"></span> Это программа: точная инструкция, здесь нечему учиться.</p>
+      </li>
+      <li class="quiz-item" data-answer="ai">
+        <p class="quiz-q">Почта сама отправляет рекламу в папку «Спам»</p>
+        <div class="quiz-choices">
+          <button type="button" class="quiz-btn" data-choice="program">Программа</button>
+          <button type="button" class="quiz-btn" data-choice="ai">ИИ</button>
+        </div>
+        <p class="quiz-feedback" tabindex="-1" hidden><span class="verdict"></span> Это ИИ: спам-фильтр обучен на миллионах писем, которые люди отметили как спам.</p>
+      </li>
+    </ol>
+    <div class="quiz-result" id="quiz-result" aria-live="polite" hidden>
+      <div>
+        <p class="quiz-score" id="quiz-score"></p>
+        <p class="quiz-msg" id="quiz-msg"></p>
+      </div>
+      <button type="button" class="btn btn-secondary" id="quiz-reset">Пройти ещё раз</button>
+    </div>
+  </div>
+</section>
+
+<section id="for-whom">
+  <div class="wrap">
+    <span class="eyebrow">Для кого</span>
+    <h2 class="section-title">Курс для тебя, если…</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="idx">01</span>
+        <h3>Слышал про ChatGPT, но не пробовал</h3>
+        <p>Все вокруг говорят про нейросети, а ты не знаешь, с какой стороны к ним подойти.</p>
+      </div>
+      <div class="card">
+        <span class="idx">02</span>
+        <h3>Пользуешься, но не понимаешь</h3>
+        <p>Иногда спрашиваешь чат-бота, но не понимаешь, почему он то помогает, то пишет ерунду.</p>
+      </div>
+      <div class="card">
+        <span class="idx">03</span>
+        <h3>Немного тревожно</h3>
+        <p>Слышал, что ИИ заменит людей, а мошенники подделывают голоса. Хочется понять, что правда.</p>
+      </div>
+      <div class="card">
+        <span class="idx">04</span>
+        <h3>Хочешь объяснить близким</h3>
+        <p>Родителям, детям или коллегам — простыми словами и без паники.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="outcomes">
+  <div class="wrap">
+    <span class="eyebrow">Результат</span>
+    <h2 class="section-title">После курса ты</h2>
+    <ul class="outcomes">
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>понимаешь, что такое ИИ, и можешь объяснить это другому</li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>уверенно пользуешься ИИ-ассистентами в быту и на работе</li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>знаешь, где ИИ ошибается, и умеешь проверять его ответы</li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>распознаёшь дипфейки и мошенничество с использованием ИИ</li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>спокойно смотришь на будущее ИИ — без страха и без иллюзий</li>
+    </ul>
+  </div>
+</section>
+
+<section id="program">
+  <div class="wrap">
+    <span class="eyebrow">Программа</span>
+    <h2 class="section-title">12 модулей — от «что это?» до своих проектов</h2>
+    <p class="lead">Сначала основы: как устроен ИИ, как с ним говорить и как не попасться на обман. Потом практикум: фото, видео, презентации, посты и продвижение.</p>
+    <ol class="modules">
+      <li><span class="num">00</span><span class="name">Знакомство</span><span class="desc">Что такое ИИ на самом деле, где он уже вокруг тебя, мифы и страхи</span></li>
+      <li><span class="num">01</span><span class="name">Как машина учится</span><span class="desc">Обучение на примерах, данные и нейросеть на пальцах</span></li>
+      <li><span class="num">02</span><span class="name">Чат-боты и языковые модели</span><span class="desc">Как работает ChatGPT и почему ИИ ошибается уверенно</span></li>
+      <li><span class="num">03</span><span class="name">Как правильно просить</span><span class="desc">Формула хорошего запроса и проверка ответов</span></li>
+      <li><span class="num">04</span><span class="name">Картинки, голос и видео</span><span class="desc">Как ИИ рисует и говорит, как распознать дипфейк</span></li>
+      <li><span class="num">05</span><span class="name">ИИ в жизни и работе</span><span class="desc">Повседневные задачи, документы — и чему не доверять</span></li>
+      <li><span class="num">06</span><span class="name">Безопасность и этика</span><span class="desc">Личные данные, мошенники с поддельными голосами, авторство</span></li>
+      <li><span class="num">07</span><span class="name">Ассистент на максимум</span><span class="desc">Порядок в чатах, голос и файлы, режимы и настройки, ошибки новичка</span></li>
+      <li><span class="num">08</span><span class="name">Фото с ИИ для себя</span><span class="desc">Редактирование, реставрация старых фото, открытки и персонажи</span></li>
+      <li><span class="num">09</span><span class="name">Видео и дизайн</span><span class="desc">Видео из фото, презентации, оформление для соцсетей</span></li>
+      <li><span class="num">10</span><span class="name">ИИ для блога и малого дела</span><span class="desc">Контент-план и посты, описания товаров, ответы клиентам, продвижение</span></li>
+      <li><span class="num">11</span><span class="name">Что дальше</span><span class="desc">Будущее ИИ без паники, куда расти и финальный проект</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <span class="eyebrow">Формат</span>
+    <h2 class="section-title">Как устроен каждый урок</h2>
+    <div class="steps">
+      <div class="step"><span class="n">01</span><h3>Простая аналогия</h3><p>Объясняем через знакомые вещи: рецепты, кошек, калькулятор.</p></div>
+      <div class="step"><span class="n">02</span><h3>10–15 минут</h3><p>Один урок — одна главная мысль. Можно читать в дороге.</p></div>
+      <div class="step"><span class="n">03</span><h3>Практика</h3><p>Пробуешь сам в обычном чат-боте, ничего не устанавливая.</p></div>
+      <div class="step"><span class="n">04</span><h3>Проверь себя</h3><p>Пара вопросов в конце, чтобы закрепить.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="author">
+  <div class="wrap">
+    <div class="author">
+      <div class="author-text">
+        <span class="eyebrow">Автор</span>
+        <h2 class="section-title">Кто ведёт курс</h2>
+        <p class="lead">Практикующий NLP/ML-инженер: каждый день работаю с языковыми моделями и знаю, как они устроены изнутри.</p>
+        <p class="lead">Я вижу, сколько путаницы вокруг ИИ: одни его боятся, другие верят каждому ответу чат-бота. Хочу, чтобы разобраться в нём мог любой человек, без технического образования. Поэтому объясняю так, как объяснил бы своим близким: просто, честно и без хайпа.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <span class="eyebrow">Вопросы</span>
+    <h2 class="section-title">Частые вопросы</h2>
+    <div class="faq">
+      <details>
+        <summary>Нужно ли уметь программировать или знать математику?</summary>
+        <p>Нет. В курсе нет кода и формул. Всё объясняется на бытовых примерах.</p>
+      </details>
+      <details>
+        <summary>Что понадобится для учёбы?</summary>
+        <p>Телефон или компьютер с интернетом. Для практики хватит бесплатных версий чат-ботов, устанавливать ничего не нужно.</p>
+      </details>
+      <details>
+        <summary>Сколько времени это займёт?</summary>
+        <p>Один урок занимает 10–15 минут. Учиться можно в своём темпе: хоть урок в день, хоть весь модуль за вечер.</p>
+      </details>
+      <details>
+        <summary>Сколько стоит курс?</summary>
+        <p>2 000 ₽ за весь курс.</p>
+      </details>
+      <details>
+        <summary>Я уже пользуюсь ChatGPT. Мне будет полезно?</summary>
+        <p>Да. Курс объясняет, почему ИИ иногда ошибается, как задавать вопросы, чтобы получать хорошие ответы, и как защититься от мошенников, которые используют ИИ.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="wrap">
+    <div class="cta">
+      <div>
+        <span class="eyebrow">Скоро</span>
+        <h2>Платформа для учёбы скоро откроется</h2>
+        <p>Там будут все уроки, карта обучения, отметки прогресса и уроки в PDF. Подпишись на Telegram-канал, чтобы узнать о запуске первым.</p>
+      </div>
+      <a class="btn btn-primary" href="https://t.me/tctporn" target="_blank" rel="noopener">Подписаться в Telegram
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© Разобраться в ИИ</span>
+    <span class="footer-links"><a href="https://t.me/tctporn" target="_blank" rel="noopener">Telegram</a><a href="https://github.com/muraik-win/t-ai-site">Исходники на GitHub</a></span>
+  </div>
+</footer>
+
+<script>
+  var toggle = document.getElementById('theme-toggle');
+  var menu = document.getElementById('theme-menu');
+  var options = Array.prototype.slice.call(menu.querySelectorAll('[data-theme-choice]'));
+  var currentSwatch = document.getElementById('theme-current-swatch');
+  var currentName = document.getElementById('theme-current-name');
+  var themeColorMeta = document.getElementById('theme-color');
+  var THEMES = ['dark', 'light', 'paper', 'night'];
+
+  function applyTheme(theme) {
+    if (theme === 'dark') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+    options.forEach(function (opt) {
+      var selected = opt.dataset.themeChoice === theme;
+      opt.setAttribute('aria-checked', String(selected));
+      if (selected) {
+        currentSwatch.className = 'swatch swatch-' + theme;
+        currentName.textContent = opt.querySelector('.name').textContent;
+      }
+    });
+    themeColorMeta.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    updateFavicon();
+  }
+
+  // Иконка вкладки = упрощённый енот с цветами текущей темы
+  var logoMark = document.querySelector('.favicon-src');
+  var favicon = document.getElementById('favicon');
+
+  function updateFavicon() {
+    var copy = logoMark.cloneNode(true);
+    var original = logoMark.querySelectorAll('*');
+    copy.querySelectorAll('*').forEach(function (el, i) {
+      var cs = getComputedStyle(original[i]);
+      el.setAttribute('fill', cs.fill);
+      if (cs.opacity !== '1') el.setAttribute('opacity', cs.opacity);
+      if (cs.stroke !== 'none') {
+        el.setAttribute('stroke', cs.stroke);
+        el.setAttribute('stroke-width', cs.strokeWidth);
+        el.setAttribute('stroke-linecap', cs.strokeLinecap);
+        el.setAttribute('stroke-linejoin', cs.strokeLinejoin);
+      }
+      el.removeAttribute('class');
+    });
+    copy.removeAttribute('class');
+    copy.removeAttribute('hidden');
+    copy.removeAttribute('aria-hidden');
+    copy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    favicon.href = 'data:image/svg+xml,' + encodeURIComponent(copy.outerHTML);
+  }
+
+  function openMenu() {
+    menu.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    var checked = menu.querySelector('[aria-checked="true"]') || options[0];
+    checked.focus();
+  }
+
+  function closeMenu(returnFocus) {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    if (returnFocus) toggle.focus();
+  }
+
+  toggle.addEventListener('click', function () {
+    if (menu.classList.contains('open')) closeMenu(false);
+    else openMenu();
+  });
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function flashGlow() {
+    if (!document.documentElement.classList.contains('motion')) return;
+    document.querySelectorAll('.logo-mark, .hero-mascot').forEach(function (el) {
+      el.classList.remove('glow');
+      void el.getBoundingClientRect(); // перезапуск анимации
+      el.classList.add('glow');
+      el.addEventListener('animationend', function (e) {
+        if (e.animationName.indexOf('theme-glow') === 0) el.classList.remove('glow');
+      });
+    });
+  }
+
+  function switchTheme(theme) {
+    setTimeout(flashGlow, 250);
+    if (reduceMotion.matches) {
+      applyTheme(theme);
+      return;
+    }
+
+    if (!document.startViewTransition) {
+      var root = document.documentElement;
+      root.classList.add('theme-fade');
+      applyTheme(theme);
+      setTimeout(function () { root.classList.remove('theme-fade'); }, 450);
+      return;
+    }
+
+    // Круг новой темы растёт от центра кнопки до самого дальнего угла экрана
+    var rect = toggle.getBoundingClientRect();
+    var x = rect.left + rect.width / 2;
+    var y = rect.top + rect.height / 2;
+    var radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    var transition = document.startViewTransition(function () { applyTheme(theme); });
+    transition.ready.then(function () {
+      document.documentElement.animate(
+        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 650, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    });
+  }
+
+  options.forEach(function (opt, i) {
+    opt.addEventListener('click', function () {
+      var theme = opt.dataset.themeChoice;
+      closeMenu(true);
+      if (opt.getAttribute('aria-checked') === 'true') return;
+      switchTheme(theme);
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+    });
+    opt.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); options[(i + 1) % options.length].focus(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); options[(i - 1 + options.length) % options.length].focus(); }
+    });
+  });
+
+  menu.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu(true);
+    if (e.key === 'Tab') closeMenu(false);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.theme-picker')) closeMenu(false);
+  });
+
+  var initialTheme = document.documentElement.dataset.theme;
+  applyTheme(THEMES.indexOf(initialTheme) !== -1 ? initialTheme : 'dark');
+
+  // Появление блоков при прокрутке
+  if (document.documentElement.classList.contains('motion') && 'IntersectionObserver' in window) {
+    var revealSelector = 'section:not(.hero) .eyebrow, section:not(.hero) .section-title, section:not(.hero) .lead, .compare > div, .note, .quiz-item, .card, .outcomes li, .modules li, .step, .author, .faq details, .cta';
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        el.classList.add('in');
+        revealObserver.unobserve(el);
+        // После появления убираем служебные классы, чтобы не мешать hover-эффектам карточек
+        var delay = parseFloat(el.style.getPropertyValue('--d')) || 0;
+        setTimeout(function () {
+          el.classList.remove('reveal', 'in');
+          el.style.removeProperty('--d');
+        }, 800 + delay);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(revealSelector).forEach(function (el) {
+      // Соседние элементы одного списка появляются с небольшой задержкой друг за другом
+      var siblings = Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches(revealSelector); });
+      var index = Math.min(siblings.indexOf(el), 6);
+      el.classList.add('reveal');
+      el.style.setProperty('--d', (index * 70) + 'ms');
+      revealObserver.observe(el);
+    });
+
+    var typeObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('typed');
+        typeObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.compare pre').forEach(function (pre) { typeObserver.observe(pre); });
+  } else {
+    document.querySelectorAll('.compare pre').forEach(function (pre) { pre.classList.add('typed'); });
+  }
+
+  // Енот на первом экране следит глазами за курсором
+  var mascot = document.querySelector('.hero-mascot');
+  if (mascot && document.documentElement.classList.contains('motion') && window.matchMedia('(pointer: fine)').matches) {
+    var pupils = mascot.querySelector('.lg-pupils');
+    var pending = false;
+    document.addEventListener('mousemove', function (e) {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        var r = mascot.getBoundingClientRect();
+        if (!r.width) return;
+        var cx = r.left + r.width / 2, cy = r.top + r.height * 0.55;
+        var dx = e.clientX - cx, dy = e.clientY - cy;
+        var len = Math.hypot(dx, dy) || 1;
+        var k = Math.min(len / 300, 1) * 9; // сдвиг в единицах рисунка
+        pupils.style.transform = 'translate(' + (dx / len * k).toFixed(1) + 'px, ' + (dy / len * k).toFixed(1) + 'px)';
+      });
+    });
+  }
+
+  // Квиз «Программа или ИИ?»
+  var quizItems = Array.prototype.slice.call(document.querySelectorAll('.quiz-item'));
+  var quizResult = document.getElementById('quiz-result');
+  var quizScore = document.getElementById('quiz-score');
+  var quizMsg = document.getElementById('quiz-msg');
+
+  function updateQuizResult() {
+    var answered = quizItems.filter(function (item) { return item.classList.contains('answered'); });
+    if (answered.length < quizItems.length) return;
+    var right = answered.filter(function (item) { return item.dataset.result === 'right'; }).length;
+    quizScore.textContent = 'Правильно: ' + right + ' из ' + quizItems.length;
+    quizMsg.textContent = right === quizItems.length
+      ? 'Отлично! Ты уже понимаешь главное отличие ИИ от обычной программы.'
+      : 'Неплохо для начала! Именно с этого отличия начинается первый урок курса.';
+    quizResult.hidden = false;
+  }
+
+  quizItems.forEach(function (item) {
+    var buttons = item.querySelectorAll('.quiz-btn');
+    var feedback = item.querySelector('.quiz-feedback');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isRight = btn.dataset.choice === item.dataset.answer;
+        buttons.forEach(function (b) {
+          b.disabled = true;
+          if (b.dataset.choice === item.dataset.answer) b.classList.add('correct');
+          else if (b === btn) b.classList.add('wrong');
+          else b.classList.add('dim');
+        });
+        item.dataset.result = isRight ? 'right' : 'wrong';
+        item.classList.add('answered');
+        feedback.querySelector('.verdict').textContent = isRight ? 'Верно!' : 'Не совсем.';
+        feedback.hidden = false;
+        feedback.focus({ preventScroll: true });
+        updateQuizResult();
+      });
+    });
+  });
+
+  document.getElementById('quiz-reset').addEventListener('click', function () {
+    quizItems.forEach(function (item) {
+      item.classList.remove('answered');
+      delete item.dataset.result;
+      item.querySelector('.quiz-feedback').hidden = true;
+      item.querySelectorAll('.quiz-btn').forEach(function (b) {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong', 'dim');
+      });
+    });
+    quizResult.hidden = true;
+    quizItems[0].querySelector('.quiz-btn').focus();
+  });
+</script>
+
+</body>
+</html>
