@@ -298,6 +298,22 @@ section + section { border-top: 1px solid var(--line); }
 .modules .name { flex: 0 1 320px; font-size: 18px; font-weight: 600; line-height: 1.35; }
 .modules .desc { flex: 1 1 340px; color: var(--muted); font-size: 16px; line-height: 1.55; }
 
+/* Стоимость и что входит */
+.price-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 48px; }
+@media (min-width: 980px) { .price-grid { grid-template-columns: 340px minmax(0, 1fr); align-items: start; } }
+.price { position: relative; padding: 32px; border: 1px solid var(--accent-line); border-radius: var(--radius); background: var(--surface); }
+.price .sum { display: block; font-family: var(--display); font-size: clamp(44px, 6vw, 56px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; color: var(--accent); white-space: nowrap; }
+.price .per { display: block; margin-top: 12px; font-size: 18px; font-weight: 600; }
+.price p { margin-top: 16px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.price .btn { margin-top: 24px; width: 100%; }
+.incl { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+.incl li { padding: 22px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: border-color 0.2s; }
+.incl li:hover { border-color: var(--accent-line); }
+.incl b { display: flex; align-items: center; gap: 12px; font-size: 18px; line-height: 1.35; }
+.incl .ico { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; }
+.incl .ico svg { width: 16px; height: 16px; }
+.incl span.d { display: block; margin-top: 8px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+
 /* Шаги урока */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 16px; margin-top: 48px; }
 .step { padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
@@ -443,6 +459,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
       <nav class="nav" aria-label="Основное меню">
         <a href="#for-whom">Для кого</a>
         <a href="#program">Программа</a>
+        <a href="#price">Цена</a>
         <a href="#faq">Вопросы</a>
       </nav>
       <div class="theme-picker">
@@ -664,6 +681,31 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
   </div>
 </section>
 
+<section id="price">
+  <div class="wrap">
+    <span class="eyebrow">Стоимость</span>
+    <h2 class="section-title">Что входит в курс</h2>
+    <div class="price-grid">
+      <div class="price">
+        <span class="sum">7&nbsp;000&nbsp;₽</span>
+        <span class="per">за весь курс, одним платежом</span>
+        <p>Без подписок и доплат: все уроки, задания, созвоны и материалы — в одной цене.</p>
+        <a class="btn btn-primary" href="#start">Узнать о старте
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+        </a>
+      </div>
+      <ul class="incl">
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>36 уроков в 12 модулях</b><span class="d">От «что такое ИИ» до практикума: ассистент, фото, видео, блог и малое дело.</span></li>
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>12 заданий с проверкой</b><span class="d">Сдаёшь результат — куратор проверяет по критериям и подсказывает, что улучшить.</span></li>
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>Мок-созвоны по 10 темам</b><span class="d">Учебные созвоны с интервьюером: проговариваешь своими словами — так знания закрепляются.</span></li>
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>57 готовых запросов</b><span class="d">Библиотека промптов с поиском: скопировал, подставил своё, отправил ассистенту.</span></li>
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>Шпаргалки по модулям</b><span class="d">Главное из каждого модуля на одной-двух страницах PDF — удобно распечатать.</span></li>
+        <li><b><span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></span>Платформа для учёбы</b><span class="d">Карта курса, отметки прогресса, глоссарий и любой урок в PDF.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section id="faq">
   <div class="wrap">
     <span class="eyebrow">Вопросы</span>
@@ -683,7 +725,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
       </details>
       <details>
         <summary>Сколько стоит курс?</summary>
-        <p>2 000 ₽ за весь курс.</p>
+        <p>7&nbsp;000&nbsp;₽ за весь курс, одним платежом. В цену входят все уроки, задания с проверкой, мок-созвоны, библиотека запросов и шпаргалки — подробнее в блоке <a href="#price">«Что входит в курс»</a>.</p>
       </details>
       <details>
         <summary>Я уже пользуюсь ChatGPT. Мне будет полезно?</summary>
@@ -857,7 +899,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
 
   // Появление блоков при прокрутке
   if (document.documentElement.classList.contains('motion') && 'IntersectionObserver' in window) {
-    var revealSelector = 'section:not(.hero) .eyebrow, section:not(.hero) .section-title, section:not(.hero) .lead, .compare > div, .note, .quiz-item, .card, .outcomes li, .modules li, .step, .author, .faq details, .cta';
+    var revealSelector = 'section:not(.hero) .eyebrow, section:not(.hero) .section-title, section:not(.hero) .lead, .compare > div, .note, .quiz-item, .card, .outcomes li, .modules li, .step, .author, .price, .incl li, .faq details, .cta';
     var revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
