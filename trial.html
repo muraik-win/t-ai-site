@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пробный урок: Что такое ИИ на самом деле — ИИ без паники</title>
+<meta name="description" content="Бесплатный первый урок курса «ИИ без паники»: чем искусственный интеллект отличается от обычной программы — простыми словами, без кода и формул.">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://muraik-win.github.io/t-ai-site/trial.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="ИИ без паники">
+<meta property="og:title" content="Пробный урок: Что такое ИИ на самом деле">
+<meta property="og:description" content="Первый урок курса «ИИ без паники» бесплатно: что такое ИИ на самом деле — без кода, формул и хайпа.">
+<meta property="og:url" content="https://muraik-win.github.io/t-ai-site/trial.html">
+<meta property="og:image" content="https://muraik-win.github.io/t-ai-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script>
+  // Тема до отрисовки (общий ключ с лендингом и платформой)
+  try {
+    var saved = localStorage.getItem('theme');
+    if (['light', 'paper', 'night'].indexOf(saved) !== -1) document.documentElement.dataset.theme = saved;
+  } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+/* ---------- Темы: те же цвета, что на лендинге ---------- */
+:root {
+  --accent: #C6F24E; --accent-hover: #DCFA8A; --on-accent: #0E1111;
+  --bg: #0E1111; --surface: #141817; --line: #262B29; --text: #E8ECE9; --muted: #A3ACA6; --code: #C9D0CB;
+  --logo-accent: #C6F24E; --logo-fur: #8F9893; --logo-light: #F6F4EF; --logo-dark: #1E2120;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --accent: #357010; --accent-hover: #285808; --on-accent: #FFFFFF;
+  --bg: #FFFFFF; --surface: #F4F6F4; --line: #E2E6E3; --text: #141816; --muted: #5A625D; --code: #2E3531;
+  --logo-accent: #6CC23A; --logo-fur: #A7AFAA; --logo-light: #FFFFFF; --logo-dark: #1E2120;
+  color-scheme: light;
+}
+:root[data-theme="paper"] {
+  --accent: #9A3714; --accent-hover: #82300F; --on-accent: #FFFFFF;
+  --bg: #F6F1E7; --surface: #EFE8DA; --line: #DDD3C1; --text: #2B2520; --muted: #6B6157; --code: #3D352E;
+  --logo-accent: #E07A45; --logo-fur: #B1A79C; --logo-light: #FFF9EF; --logo-dark: #2B2520;
+  color-scheme: light;
+}
+:root[data-theme="night"] {
+  --accent: #8AB4FF; --accent-hover: #B0CCFF; --on-accent: #0F1424;
+  --bg: #0F1424; --surface: #161D33; --line: #263052; --text: #E6E9F5; --muted: #A0A8C6; --code: #C8CEE6;
+  --logo-accent: #8AB4FF; --logo-fur: #7F88A6; --logo-light: #F3F5FC; --logo-dark: #141A2E;
+  color-scheme: dark;
+}
+:root {
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 45%, var(--line));
+  --display: Unbounded, sans-serif;
+  --body: Inter, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sidebar: 300px;
+  --topbar: 64px;
+}
+
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--on-accent); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Логотип-енот: цвета из темы */
+.logo-mark { display: block; width: 36px; height: 36px; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--logo-accent) 40%, transparent)); }
+.lg-dark { fill: var(--logo-dark); }
+.lg-fur { fill: var(--logo-fur); }
+.lg-light, .lg-eye-white { fill: var(--logo-light); }
+.lg-dark-line { fill: none; stroke: var(--logo-dark); }
+.lg-circuit { fill: none; stroke: var(--logo-accent); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.lg-node-ring { fill: var(--logo-dark); stroke: var(--logo-accent); stroke-width: 6; }
+.lg-iris { fill: #7A5230; }
+.lg-pupil { fill: var(--logo-dark); }
+.lg-shine { fill: #FFFFFF; }
+
+
+/* ---------- Кнопки ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 20px; border: 1px solid transparent; border-radius: 12px; font-family: var(--body); font-size: 15px; font-weight: 600; line-height: 1.2; text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
+.btn svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline-offset: 2px; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); color: var(--on-accent); transform: translateY(-1px); box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 28%, transparent); }
+.btn-secondary { background: var(--surface); border-color: var(--line); color: var(--text); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--accent) 6%, var(--surface)); border-color: var(--accent-line); color: var(--text); }
+.btn-done { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.btn-done:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { min-height: 38px; padding: 0 14px; border-radius: 10px; font-size: 14px; }
+.btn-sm svg { width: 16px; height: 16px; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+
+.theme-picker { position: relative; }
+.theme-toggle { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px 0 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-size: 14px; font-weight: 500; line-height: 1; cursor: pointer; transition: border-color .15s; }
+.theme-toggle:hover { border-color: var(--accent-line); }
+.theme-toggle .chevron { width: 14px; height: 14px; color: var(--muted); transition: transform .2s; }
+.theme-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+/* Иконка темы: круг цвета фона с точкой цвета акцента */
+.swatch { position: relative; display: block; flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,.45); }
+.swatch::after { content: ""; position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--swatch-accent); }
+.swatch-dark  { background: #0E1111; --swatch-accent: #C6F24E; }
+.swatch-light { background: #FFFFFF; --swatch-accent: #357010; }
+.swatch-paper { background: #F6F1E7; --swatch-accent: #9A3714; }
+.swatch-night { background: #0F1424; --swatch-accent: #8AB4FF; }
+.theme-menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 45; width: 250px; margin: 0; padding: 6px; list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.25); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .15s, transform .15s, visibility .15s; }
+.theme-menu.open { opacity: 1; visibility: visible; transform: none; }
+.theme-option { width: 100%; display: flex; align-items: center; gap: 12px; padding: 9px 10px; border: 0; border-radius: 10px; background: transparent; color: var(--text); line-height: 1.35; text-align: left; cursor: pointer; }
+.theme-option:hover { background: var(--line); }
+.theme-option:focus-visible { outline-offset: -2px; }
+.theme-option .name { display: block; font-size: 15px; font-weight: 600; }
+.theme-option .hint { display: block; font-size: 13px; color: var(--muted); }
+.theme-option .check { margin-left: auto; width: 16px; height: 16px; color: var(--accent); visibility: hidden; }
+.theme-option[aria-checked="true"] .check { visibility: visible; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { z-index: 2; }
+.menu-btn { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); cursor: pointer; align-items: center; justify-content: center; }
+.menu-btn svg { width: 20px; height: 20px; }
+
+
+.prose { margin-top: 36px; font-size: 18px; line-height: 1.75; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { margin-top: 2.2em; font-family: var(--display); font-weight: 500; font-size: 26px; letter-spacing: -.01em; }
+.prose h3 { margin-top: 1.8em; font-size: 20px; font-weight: 600; }
+.prose h2 + *, .prose h3 + * { margin-top: .7em; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li + li { margin-top: .4em; }
+.prose li::marker { color: var(--accent); }
+.prose strong { font-weight: 600; }
+.prose hr { border: 0; height: 1px; background: var(--line); margin: 2.5em 0; }
+.prose code { padding: 1px 6px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-family: var(--mono); font-size: .85em; }
+.prose table { width: 100%; border-collapse: collapse; font-size: 16px; display: block; overflow-x: auto; }
+.prose th, .prose td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.prose th { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); }
+.prose blockquote { margin: 1.6em 0; padding: 18px 22px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.prose blockquote p + p { margin-top: .5em; }
+.prose blockquote.key { background: var(--accent-soft); border-color: var(--accent-line); }
+.prose blockquote.key strong:first-child { color: var(--accent); }
+.prose blockquote.curious { border-style: dashed; font-size: 16px; }
+.prose blockquote.try { border: 1px solid var(--accent); background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--surface); box-shadow: 0 0 0 4px var(--accent-soft); }
+.prose blockquote.try > p:first-child strong { color: var(--accent); font-size: 1.05em; }
+.prose blockquote.try em { display: block; margin: 4px 0; padding: 12px 14px; border-radius: 10px; background: var(--bg); border: 1px dashed var(--accent-line); font-style: normal; }
+.prose details { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 0 20px; }
+.prose details[open] { padding-bottom: 16px; border-color: var(--accent-line); }
+.prose summary { cursor: pointer; padding: 14px 0; font-weight: 600; color: var(--accent); list-style: none; display: flex; align-items: center; gap: 10px; }
+.prose summary::-webkit-details-marker { display: none; }
+.prose summary::before, .mock summary::before { content: ""; flex: 0 0 auto; width: 7px; height: 7px; margin: 0 4px 0 2px; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(-45deg); transition: transform .2s; }
+.prose details[open] summary::before, .mock details[open] summary::before { transform: rotate(45deg); }
+.prose details > * + * { margin-top: .8em; }
+.prose a[data-soon] { color: var(--muted); text-decoration-style: dashed; cursor: help; }
+/* ---------- Страница пробного урока ---------- */
+* { box-sizing: border-box; }
+html { scroll-padding-top: 88px; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+button { font: inherit; }
+.topbar { position: sticky; top: 0; z-index: 30; height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-family: var(--mono); font-size: 15px; font-weight: 500; }
+.brand:hover { color: var(--text); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 96px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; line-height: 1.4; }
+.lesson-title { margin-top: 16px; font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.2vw, 42px); letter-spacing: -.02em; }
+.lesson-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; color: var(--muted); font-size: 14px; }
+.full { margin-top: 56px; padding: clamp(24px, 4vw, 36px); border: 1px solid var(--accent-line); border-radius: 20px; background: var(--surface); }
+.full h2 { font-family: var(--display); font-weight: 500; font-size: clamp(24px, 3vw, 30px); }
+.full p { margin-top: 12px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+.full ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.full li { display: flex; gap: 10px; font-size: 16px; line-height: 1.5; }
+.full li svg { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 3px; color: var(--accent); }
+.full .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+@media (max-width: 560px) {
+  .brand .name, .theme-toggle .label-text { display: none; }
+  .theme-toggle { padding: 0 9px; }
+  .topbar { padding: 0 16px; }
+  .wrap { padding: 32px 16px 72px; }
+  .prose { font-size: 17px; }
+  .full .btn { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="./"><svg viewBox="196 112 632 632" class="logo-mark" aria-hidden="true"><polygon class="lg-dark" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266"/><polygon class="lg-dark-line" points="512,258 440,266 290,198 283,252 300,345 232,494 280,512 254,530 398,618 512,664 626,618 770,530 744,512 792,494 724,345 741,252 734,198 584,266" stroke-width="18" stroke-linejoin="round"/><polygon class="lg-fur" points="512,282 445,290 308,224 304,254 320,352 262,490 302,506 284,522 404,602 512,642 620,602 740,522 722,506 762,490 704,352 720,254 716,224 579,290"/><polygon class="lg-light" points="320,240 402,290 352,304 332,276"/><polygon class="lg-light" points="704,240 622,290 672,304 692,276"/><polygon class="lg-dark" points="445,290 512,282 579,290 560,330 534,362 522,470 512,490 502,470 490,362 464,330"/><polygon class="lg-light" points="322,374 440,340 478,396 468,410 396,406 330,392"/><polygon class="lg-light" points="702,374 584,340 546,396 556,410 628,406 694,392"/><polygon class="lg-dark" points="282,442 330,420 400,412 470,418 500,462 490,500 452,546 380,526 320,502 290,472"/><polygon class="lg-dark" points="742,442 694,420 624,412 554,418 524,462 534,500 572,546 644,526 704,502 734,472"/><polygon class="lg-light" points="306,508 380,530 452,550 474,602 418,604 334,546"/><polygon class="lg-light" points="718,508 644,530 572,550 550,602 606,604 690,546"/><polygon class="lg-light" points="478,522 512,502 546,522 560,600 512,634 464,600"/><polygon class="lg-dark" points="482,530 542,530 532,566 512,578 492,566"/><path class="lg-dark-line" d="M512 576V590M512 590Q500 607 484 598M512 590Q524 607 540 598" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><g class="lg-circuits"><path class="lg-circuit" pathLength="1" d="M392 418L374 398L374 370M370 474L336 474L318 492M448 508L458 530"/><path class="lg-circuit" pathLength="1" d="M632 418L650 398L650 370M654 474L688 474L706 492M576 508L566 530"/><circle class="lg-node-ring" cx="374" cy="360" r="9"/><circle class="lg-node-ring" cx="312" cy="498" r="8"/><circle class="lg-node-ring" cx="461" cy="539" r="8"/><circle class="lg-node-ring" cx="650" cy="360" r="9"/><circle class="lg-node-ring" cx="712" cy="498" r="8"/><circle class="lg-node-ring" cx="563" cy="539" r="8"/></g><g class="lg-eyes"><circle class="lg-eye-white" cx="428" cy="460" r="40"/><circle class="lg-eye-white" cx="596" cy="460" r="40"/><g class="lg-pupils"><circle class="lg-iris" cx="428" cy="457" r="32"/><circle class="lg-pupil" cx="428" cy="457" r="18"/><circle class="lg-shine" cx="418" cy="444" r="10"/><circle class="lg-shine" cx="440" cy="470" r="4.5"/><circle class="lg-iris" cx="596" cy="457" r="32"/><circle class="lg-pupil" cx="596" cy="457" r="18"/><circle class="lg-shine" cx="586" cy="444" r="10"/><circle class="lg-shine" cx="608" cy="470" r="4.5"/></g></g></svg><span class="name">ии-без-паники</span></a>
+  <div class="topbar-right">
+    <a class="btn btn-secondary btn-sm" href="./#price">О курсе</a>
+    <div class="theme-picker">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu">
+        <span class="swatch swatch-dark" id="theme-current-swatch" aria-hidden="true"></span>
+        <span class="label-text"><span class="visually-hidden">Тема: </span><span id="theme-current-name">Тёмная</span></span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <ul class="theme-menu" id="theme-menu" role="menu" aria-label="Тема оформления">
+        <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="dark" aria-checked="false"><span class="swatch swatch-dark" aria-hidden="true"></span><span><span class="name">Тёмная</span><span class="hint">Салатовый на чёрном</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+        <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="light" aria-checked="false"><span class="swatch swatch-light" aria-hidden="true"></span><span><span class="name">Светлая</span><span class="hint">Чистый белый</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+        <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="paper" aria-checked="false"><span class="swatch swatch-paper" aria-hidden="true"></span><span><span class="name">Бумага</span><span class="hint">Тёплая, как книга</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+        <li role="none"><button class="theme-option" type="button" role="menuitemradio" data-theme-choice="night" aria-checked="false"><span class="swatch swatch-night" aria-hidden="true"></span><span><span class="name">Ночь</span><span class="hint">Глубокий синий</span></span><svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <span class="eyebrow">Пробный урок · бесплатно</span>
+  <h1 class="lesson-title">Что такое ИИ на самом деле</h1>
+  <div class="lesson-meta"><span>≈ 8 мин</span><span>Модуль 0. Знакомство</span><span>Урок 1 из 36</span></div>
+  <article class="prose">
+<h2>Зачем это нужно</h2>
+<p>Про искусственный интеллект сейчас говорят везде: в новостях, на работе, за семейным ужином. Одни говорят, что он скоро заменит всех, другие — что это просто модная игрушка. Чтобы понять, кто прав, сначала нужно разобраться, что вообще скрывается за этими двумя буквами — ИИ.</p>
+<h2>Что узнаешь</h2>
+<ul>
+<li>чем ИИ отличается от обычной программы;</li>
+<li>почему говорят, что ИИ «учится»;</li>
+<li>чего ИИ на самом деле не умеет;</li>
+<li>что такое «нейросеть» — в одном предложении.</li>
+</ul>
+<blockquote class="try">
+<p>⚡ <strong>Попробуй прямо сейчас — 2 минуты</strong></p>
+<p>Прежде чем читать дальше, посмотри на ИИ в деле. Открой любой чат-бот — например, GigaChat от Сбера или Алису от Яндекса (на сайте или в приложении) — и напиши ему:</p>
+<p><em>Объясни, что такое искусственный интеллект, как будто мне 7 лет. А потом придумай об этом короткое смешное стихотворение.</em></p>
+<p>Получилось? Программа только что объяснила тебе себя саму — да ещё и в стихах. К концу урока ты поймёшь, как такое вообще возможно. А если открыть чат-бот не вышло — не страшно: подробно о том, как начать, расскажем в уроке 3.1.</p>
+</blockquote>
+<hr />
+<h2>Обычная программа: рецепт</h2>
+<p>Представь калькулятор. Ты нажимаешь «2 + 2», он показывает «4». Каждый раз. Без исключений.</p>
+<p>Так работает обычная программа: человек-программист заранее расписал <strong>все правила</strong>, как в кулинарном рецепте. «Если нажали плюс — сложи числа». Программа ничего не придумывает и ничему не учится, она просто точно выполняет инструкцию.</p>
+<p>Для калькулятора это отлично. Но попробуй написать такой рецепт для задачи: <strong>«определи, есть ли на фотографии кошка»</strong>.</p>
+<p>Какие правила тут написать? «Если есть уши — это кошка»? У собаки тоже есть уши. «Если есть усы»? У папы тоже. Кошка может быть рыжей, чёрной, спящей, снятой сзади, наполовину спрятанной под диваном… Правил понадобятся миллионы, и всё равно найдётся кошка, которая в них не влезет.</p>
+<h2>ИИ: учёба на примерах</h2>
+<p>А теперь вспомни, как ребёнок узнаёт, кто такая кошка. Ему никто не диктует правила. Ему просто много раз показывают: «смотри, кошка», «а это собака», «и это кошка». Через какое-то время ребёнок сам начинает узнавать кошек — даже тех, которых раньше никогда не видел.</p>
+<p><strong>Искусственный интеллект работает похоже.</strong> Вместо того чтобы писать правила, программе показывают огромное количество примеров — например, миллион фотографий с подписями «кошка» и «не кошка». Программа сама находит закономерности, которые отличают одно от другого.</p>
+<p>Этот процесс называют <strong>обучением</strong>, а сами примеры — <strong>данными</strong>.</p>
+<blockquote class="key">
+<p><strong>Главная мысль урока:</strong>
+Обычную программу <em>пишут</em> правилами. ИИ <em>учат</em> на примерах.</p>
+</blockquote>
+<h2>Так это «настоящий» интеллект?</h2>
+<p>Не совсем. Название «искусственный интеллект» звучит так, будто внутри компьютера сидит кто-то думающий. Это не так.</p>
+<p>ИИ очень хорошо находит закономерности — часто лучше человека. Но он:</p>
+<ul>
+<li><strong>не понимает мир так, как ты.</strong> Он видел миллион фото кошек, но не знает, каково это — гладить кошку;</li>
+<li><strong>не имеет желаний и намерений.</strong> Он ничего не «хочет», даже когда пишет «я хочу помочь»;</li>
+<li><strong>может ошибаться очень уверенно.</strong> Если в примерах было что-то странное, ИИ выучит и эту странность.</li>
+</ul>
+<p>Честнее думать об ИИ как об <strong>очень мощном инструменте для поиска закономерностей</strong>, а не как о цифровом человеке.</p>
+<h2>А что такое нейросеть?</h2>
+<p>Это слово ты наверняка слышал. Если коротко: <strong>нейросеть — это самый популярный сегодня способ сделать ИИ</strong>. Её устройство отдалённо вдохновлено тем, как связаны клетки в нашем мозге. ChatGPT, генераторы картинок, распознавание лиц в телефоне — всё это нейросети.</p>
+<p>Как именно она устроена внутри, разберём в уроке 1.3. Пока достаточно запомнить: ИИ — это общая идея «машина учится на примерах», а нейросеть — один из способов её реализовать.</p>
+<blockquote class="curious">
+<p>🔍 <strong>Для любопытных</strong>
+Ты можешь встретить ещё два термина: <strong>машинное обучение</strong> (machine learning) и <strong>глубокое обучение</strong> (deep learning). Их можно представить как матрёшку: ИИ — самая большая кукла, внутри неё машинное обучение (учёба на данных), а внутри него глубокое обучение (учёба с помощью больших нейросетей).</p>
+</blockquote>
+<hr />
+<h2>Практика</h2>
+<p>Посмотри на список и для каждого пункта реши: здесь работает <strong>обычная программа</strong> (правила) или <strong>ИИ</strong> (обучение на примерах)?</p>
+<ol>
+<li>Будильник звонит в 7:00.</li>
+<li>Телефон разблокируется, когда видит твоё лицо.</li>
+<li>Видеосервис советует ролик «вам может понравиться».</li>
+<li>Банкомат выдаёт ровно ту сумму, которую ты ввёл.</li>
+<li>Почта сама отправляет рекламу в папку «Спам».</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+
+<ol>
+<li><strong>Программа</strong> — простое правило «в 7:00 включи звук».</li>
+<li><strong>ИИ</strong> — лицо каждый раз выглядит чуть иначе (свет, причёска, очки), правилами это не описать.</li>
+<li><strong>ИИ</strong> — сервис учится на том, что смотрели ты и миллионы похожих людей.</li>
+<li><strong>Программа</strong> — точная инструкция, никакой учёбы.</li>
+<li><strong>ИИ</strong> — спам-фильтр обучен на миллионах писем, которые люди отметили как спам.</li>
+</ol>
+</details>
+
+<h2>Проверь себя</h2>
+<ol>
+<li>Чем обычная программа отличается от ИИ?</li>
+<li>Почему для распознавания кошки на фото сложно написать правила?</li>
+<li>Можно ли сказать, что ИИ «понимает», что изображено на фото?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+
+<ol>
+<li>Обычную программу пишут правилами, а ИИ учится на примерах.</li>
+<li>Кошки выглядят слишком по-разному, и правил понадобилось бы бесконечно много.</li>
+<li>Не в человеческом смысле: ИИ нашёл закономерности в пикселях, но не знает, что такое кошка в жизни.</li>
+</ol>
+</details>
+
+<h2>Итоги</h2>
+<ul>
+<li>Обычная программа следует правилам, которые написал человек.</li>
+<li>ИИ сам находит закономерности в большом количестве примеров (данных).</li>
+<li>ИИ — мощный инструмент, а не думающее существо: он может ошибаться и ничего не «хочет».</li>
+<li>Нейросеть — самый популярный сегодня способ создавать ИИ.</li>
+</ul>
+
+  </article>
+  <section class="full" id="full">
+    <h2>Это был первый из 36 уроков</h2>
+    <p>Дальше — как машина учится, почему чат-боты уверенно ошибаются, как правильно просить ИИ, как распознать дипфейк и мошенников, и практикум: ассистент, фото, видео, блог и малое дело.</p>
+    <ul>
+      <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>задания с проверкой куратором</li>
+      <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>мок-созвоны с интервьюером</li>
+      <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>библиотека из 57 готовых запросов</li>
+      <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>шпаргалки по каждому модулю</li>
+    </ul>
+    <div class="row">
+      <a class="btn btn-primary" href="./#price">Что входит в курс · 7&nbsp;000&nbsp;₽<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+      <a class="btn btn-secondary" href="./#program">Вся программа</a>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  var themeToggle = document.getElementById('theme-toggle');
+  var themeMenu = document.getElementById('theme-menu');
+  var themeOptions = Array.prototype.slice.call(themeMenu.querySelectorAll('[data-theme-choice]'));
+
+  function applyTheme(theme) {
+    if (theme === 'dark') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+    themeOptions.forEach(function (opt) {
+      var on = opt.dataset.themeChoice === theme;
+      opt.setAttribute('aria-checked', String(on));
+      if (on) {
+        document.getElementById('theme-current-swatch').className = 'swatch swatch-' + theme;
+        document.getElementById('theme-current-name').textContent = opt.querySelector('.name').textContent;
+      }
+    });
+  }
+
+  function closeThemeMenu(returnFocus) {
+    themeMenu.classList.remove('open');
+    themeToggle.setAttribute('aria-expanded', 'false');
+    if (returnFocus) themeToggle.focus();
+  }
+
+  // Круг новой темы расходится от кнопки (View Transitions API), без него — мгновенная смена
+  function switchTheme(theme) {
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { applyTheme(theme); return; }
+    var r = themeToggle.getBoundingClientRect();
+    var x = r.left + r.width / 2, y = r.top + r.height / 2;
+    var radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    document.startViewTransition(function () { applyTheme(theme); }).ready.then(function () {
+      document.documentElement.animate(
+        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 600, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    });
+  }
+
+  themeToggle.addEventListener('click', function () {
+    if (themeMenu.classList.contains('open')) { closeThemeMenu(false); return; }
+    themeMenu.classList.add('open');
+    themeToggle.setAttribute('aria-expanded', 'true');
+    (themeMenu.querySelector('[aria-checked="true"]') || themeOptions[0]).focus();
+  });
+  themeOptions.forEach(function (opt, i) {
+    opt.addEventListener('click', function () {
+      closeThemeMenu(true);
+      if (opt.getAttribute('aria-checked') === 'true') return;
+      switchTheme(opt.dataset.themeChoice);
+      try { localStorage.setItem('theme', opt.dataset.themeChoice); } catch (e) {}
+    });
+    opt.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); themeOptions[(i + 1) % themeOptions.length].focus(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); themeOptions[(i - 1 + themeOptions.length) % themeOptions.length].focus(); }
+    });
+  });
+  themeMenu.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeThemeMenu(true);
+    if (e.key === 'Tab') closeThemeMenu(false);
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.theme-picker')) closeThemeMenu(false);
+  });
+  applyTheme(document.documentElement.dataset.theme || 'dark');
+})();
+</script>
+</body>
+</html>

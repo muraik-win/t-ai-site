@@ -306,6 +306,7 @@ section + section { border-top: 1px solid var(--line); }
 .price .per { display: block; margin-top: 12px; font-size: 18px; font-weight: 600; }
 .price p { margin-top: 16px; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .price .btn { margin-top: 24px; width: 100%; }
+.price .try-link { margin-top: 12px; font-size: 15px; }
 .incl { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
 .incl li { padding: 22px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: border-color 0.2s; }
 .incl li:hover { border-color: var(--accent-line); }
@@ -491,7 +492,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
       <a class="btn btn-primary" href="#start">Узнать о старте
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
       </a>
-      <a class="btn btn-secondary" href="#program">Посмотреть программу</a>
+      <a class="btn btn-secondary" href="trial.html">Пробный урок бесплатно</a>
     </div>
     <ul class="hero-facts">
       <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>12 модулей</li>
@@ -690,6 +691,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
         <span class="sum">7&nbsp;000&nbsp;₽</span>
         <span class="per">за весь курс, одним платежом</span>
         <p>Без подписок и доплат: все уроки, задания, созвоны и материалы — в одной цене.</p>
+        <p class="try-link">Не уверен? <a href="trial.html">Пройди первый урок бесплатно</a> — без регистрации.</p>
         <a class="btn btn-primary" href="#start">Узнать о старте
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
         </a>
@@ -726,6 +728,10 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
       <details>
         <summary>Сколько стоит курс?</summary>
         <p>7&nbsp;000&nbsp;₽ за весь курс, одним платежом. В цену входят все уроки, задания с проверкой, мок-созвоны, библиотека запросов и шпаргалки — подробнее в блоке <a href="#price">«Что входит в курс»</a>.</p>
+      </details>
+      <details>
+        <summary>Можно попробовать перед покупкой?</summary>
+        <p>Да. Первый урок открыт бесплатно и без регистрации: <a href="trial.html">«Что такое ИИ на самом деле»</a>. По нему видно, как устроены все уроки курса.</p>
       </details>
       <details>
         <summary>Я уже пользуюсь ChatGPT. Мне будет полезно?</summary>
