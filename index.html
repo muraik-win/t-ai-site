@@ -21,6 +21,24 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="ИИ без паники: как работает искусственный интеллект — без кода, формул и хайпа">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://muraik-win.github.io/t-ai-site/">
+<!-- Разметка курса для поисковиков (schema.org) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "ИИ без паники",
+  "description": "Курс про искусственный интеллект для тех, кто совсем не разбирается: что такое ИИ и как он работает, как пользоваться чат-ботами и генераторами картинок, как не попасться на дипфейки и мошенников. Без кода, формул и хайпа.",
+  "url": "https://muraik-win.github.io/t-ai-site/",
+  "image": "https://muraik-win.github.io/t-ai-site/og.png",
+  "inLanguage": "ru",
+  "educationalLevel": "Beginner",
+  "isAccessibleForFree": false,
+  "provider": { "@type": "Organization", "name": "ИИ без паники", "url": "https://muraik-win.github.io/t-ai-site/" },
+  "offers": { "@type": "Offer", "category": "Paid", "price": "7000", "priceCurrency": "RUB" },
+  "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "courseWorkload": "PT8H" }
+}
+</script>
 <script>
   // Применяем сохранённую тему до отрисовки, чтобы не было мигания
   try {
@@ -297,6 +315,30 @@ section + section { border-top: 1px solid var(--line); }
 .modules .num { flex: 0 0 auto; min-width: 44px; padding: 4px 0; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-size: 14px; font-weight: 500; text-align: center; }
 .modules .name { flex: 0 1 320px; font-size: 18px; font-weight: 600; line-height: 1.35; }
 .modules .desc { flex: 1 1 340px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+
+/* Сравнение с бесплатными роликами */
+.vs { margin-top: 48px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.vs-row { display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr); border-top: 1px solid var(--line); }
+.vs-row:first-child { border-top: 0; }
+.vs-row > * { padding: 20px 24px; font-size: 16px; line-height: 1.55; }
+.vs-row .k { font-weight: 600; font-size: 17px; }
+.vs-row .free { color: var(--muted); }
+.vs-row .ours { background: var(--accent-soft); }
+.vs-head > * { padding-top: 16px; padding-bottom: 16px; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4; }
+.vs-head .free { color: var(--muted); }
+.vs-head .ours { color: var(--accent); }
+.vs-row .lbl { display: none; }
+@media (max-width: 760px) {
+  .vs-head { display: none; }
+  .vs-row { grid-template-columns: minmax(0, 1fr); }
+  .vs-row:nth-child(2) { border-top: 0; }
+  .vs-row > * { padding: 14px 20px; }
+  .vs-row .k { padding-bottom: 0; }
+  .vs-row .free { padding-top: 8px; padding-bottom: 8px; }
+  .vs-row .ours { margin: 0 12px 12px; border-radius: 10px; }
+  .vs-row .lbl { display: block; margin-bottom: 2px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .vs-row .ours .lbl { color: var(--accent); }
+}
 
 /* Стоимость и что входит */
 .price-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 48px; }
@@ -682,6 +724,23 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
   </div>
 </section>
 
+<section id="why">
+  <div class="wrap">
+    <span class="eyebrow">Зачем платить</span>
+    <h2 class="section-title">Чем курс отличается от бесплатных роликов</h2>
+    <p class="lead">Бесплатного про ИИ много, и кое-что из этого правда хорошее. Курс нужен, когда хочется не набора видео, а понятной системы — и чтобы было у кого спросить.</p>
+    <div class="vs">
+      <div class="vs-row vs-head" aria-hidden="true"><div class="k"></div><div class="free">Бесплатные ролики и статьи</div><div class="ours">ИИ без паники</div></div>
+      <div class="vs-row"><div class="k">Порядок</div><div class="free"><span class="lbl">Бесплатные ролики</span>Разрозненные темы: каждый ролик сам по себе, непонятно, с чего начать</div><div class="ours"><span class="lbl">ИИ без паники</span>От простого к сложному: 12 модулей, каждый урок опирается на предыдущий</div></div>
+      <div class="vs-row"><div class="k">Язык</div><div class="free"><span class="lbl">Бесплатные ролики</span>То термины без объяснений, то «волшебная кнопка», которая всё сделает за тебя</div><div class="ours"><span class="lbl">ИИ без паники</span>Каждое новое слово объясняется на бытовом примере, без кода, формул и английского</div></div>
+      <div class="vs-row"><div class="k">Практика</div><div class="free"><span class="lbl">Бесплатные ролики</span>Посмотрел — и забыл, попробовать часто не на чем</div><div class="ours"><span class="lbl">ИИ без паники</span>Задания в обычных бесплатных сервисах после каждого урока</div></div>
+      <div class="vs-row"><div class="k">Обратная связь</div><div class="free"><span class="lbl">Бесплатные ролики</span>Остаётся вопрос в комментариях — может, кто-то ответит</div><div class="ours"><span class="lbl">ИИ без паники</span>12 заданий проверяет куратор, плюс мок-созвоны с интервьюером</div></div>
+      <div class="vs-row"><div class="k">Тон</div><div class="free"><span class="lbl">Бесплатные ролики</span>«ИИ заменит всех» или реклама очередного сервиса по подписке</div><div class="ours"><span class="lbl">ИИ без паники</span>Честно о возможностях и ограничениях, без запугивания и без продажи подписок</div></div>
+      <div class="vs-row"><div class="k">Безопасность</div><div class="free"><span class="lbl">Бесплатные ролики</span>О рисках говорят редко и вскользь</div><div class="ours"><span class="lbl">ИИ без паники</span>Отдельный модуль: мошенники, дипфейки, личные данные, проверка ответов</div></div>
+    </div>
+  </div>
+</section>
+
 <section id="price">
   <div class="wrap">
     <span class="eyebrow">Стоимость</span>
@@ -690,7 +749,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
       <div class="price">
         <span class="sum">7&nbsp;000&nbsp;₽</span>
         <span class="per">за весь курс, одним платежом</span>
-        <p>Без подписок и доплат: все уроки, задания, созвоны и материалы — в одной цене.</p>
+        <p>Без подписок и доплат: все уроки, задания, созвоны, материалы и сертификат об окончании — в одной цене.</p>
         <p class="try-link">Не уверен? <a href="trial.html">Пройди первый урок бесплатно</a> — без регистрации.</p>
         <a class="btn btn-primary" href="#start">Узнать о старте
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
@@ -905,7 +964,7 @@ html { scroll-padding-top: calc(88px * var(--zoom, 1)); }
 
   // Появление блоков при прокрутке
   if (document.documentElement.classList.contains('motion') && 'IntersectionObserver' in window) {
-    var revealSelector = 'section:not(.hero) .eyebrow, section:not(.hero) .section-title, section:not(.hero) .lead, .compare > div, .note, .quiz-item, .card, .outcomes li, .modules li, .step, .author, .price, .incl li, .faq details, .cta';
+    var revealSelector = 'section:not(.hero) .eyebrow, section:not(.hero) .section-title, section:not(.hero) .lead, .compare > div, .note, .quiz-item, .card, .outcomes li, .modules li, .step, .author, .vs, .price, .incl li, .faq details, .cta';
     var revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
